@@ -1,0 +1,4 @@
+<CREOLE-DIRECTORY>
+  <JAR SCAN="true">Java.jar</JAR>
+  <JAR>lib/rsyntaxtextarea.jar</JAR> 
+</CREOLE-DIRECTORY>
