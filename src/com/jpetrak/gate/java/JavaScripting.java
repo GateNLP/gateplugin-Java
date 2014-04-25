@@ -7,6 +7,7 @@ import gate.Controller;
 import gate.AnnotationSet;
 import gate.Corpus;
 import gate.FeatureMap;
+import gate.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -22,6 +23,9 @@ public class JavaScripting  {
   public String outputASName = null;
   public AnnotationSet outputAS = null;
   public FeatureMap parms = null;
+  public Resource resource1 = null;
+  public Resource resource2 = null;
+  public Resource resource3 = null;
   public void execute() { 
   }
   public void controllerStarted()  { }

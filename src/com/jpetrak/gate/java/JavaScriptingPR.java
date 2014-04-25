@@ -94,6 +94,40 @@ public class JavaScriptingPR
     document = d;
   }
 
+  @Optional
+  @RunTime
+  @CreoleParameter()
+  public void setResource1(Resource r) {
+    resource1 = r;
+  }
+  public Resource getResource1() {
+    return resource1;
+  }
+  protected Resource resource1;
+  
+  @Optional
+  @RunTime
+  @CreoleParameter()
+  public void setResource2(Resource r) {
+    resource2 = r;
+  }
+  public Resource getResource2() {
+    return resource2;
+  }
+  protected Resource resource2;
+  
+  @Optional
+  @RunTime
+  @CreoleParameter()
+  public void setResource3(Resource r) {
+    resource3 = r;
+  }
+  public Resource getResource3() {
+    return resource3;
+  }
+  protected Resource resource3;
+  
+  
   public FeatureMap getScriptParams() {
     if (scriptParams == null) {
       scriptParams = Factory.newFeatureMap();
@@ -120,7 +154,7 @@ public class JavaScriptingPR
           "public class THECLASSNAME extends JavaScripting {";
   String classEpilog = "}";
   Pattern importPattern = Pattern.compile(
-          "\\s*import\\s+([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*\\s*;\\s*(?://.*)?");
+          "\\s*import\\s+([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*(?:[\\p{L}_$][\\p{L}\\p{N}_$]*|\\*)\\s*;\\s*(?://.*)?");
 
   // This will try and compile the script. 
   // This is done 
@@ -189,6 +223,9 @@ public class JavaScriptingPR
       if(registeredEditorVR != null) {
         registeredEditorVR.setCompilationOk();
       }
+      javaProgramClass.resource1 = resource1;
+      javaProgramClass.resource2 = resource2;
+      javaProgramClass.resource3 = resource3;
       isCompileError = false;
     } catch (Exception ex) {
       System.err.println("Problem compiling JavaScripting Class");
