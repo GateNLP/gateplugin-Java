@@ -285,6 +285,7 @@ public class JavaScriptingPR
     // We re-set the global initialization indicator so that re-init can be
     // used to test the global init method
     if(javaProgramClass != null) {
+      javaProgramClass.cleanupPr();
       javaProgramClass.resetInitAll();
     }
     init();
@@ -295,6 +296,7 @@ public class JavaScriptingPR
     super.cleanup();
     // make sure the generated class does not hold any references
     if (javaProgramClass != null) {
+      javaProgramClass.cleanupPr();
       javaProgramClass.doc = null;
       javaProgramClass.controller = null;
       javaProgramClass.corpus = null;
