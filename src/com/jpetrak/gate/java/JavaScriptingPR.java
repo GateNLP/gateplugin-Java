@@ -22,6 +22,7 @@ import gate.util.GateClassLoader;
 import gate.util.GateRuntimeException;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -335,19 +336,36 @@ public class JavaScriptingPR
         javaProgramClass.inputAS = null;
         javaProgramClass.outputAS = null;
       } catch (Exception ex) {
-        throw new GateRuntimeException("Could not run program ", ex);
+        printGeneratedProgram(System.err);
+        throw new GateRuntimeException("Could not run program for script "+this.getName(), ex);
       }
     } else {
       throw new GateRuntimeException("Cannot run script, compilation failed: "+getJavaProgramUrl());
     }
   }
 
+  private void printGeneratedProgram(PrintStream stream) {
+    int linenr = 0;
+    for(String line : javaProgramLines) {
+      linenr++;
+      stream.println(linenr+" "+line);
+    }
+  }
+  
+  
+  
   @Override
   public void controllerExecutionStarted(Controller controller) {
     this.controller = controller;
     if (javaProgramClass != null) {
       javaProgramClass.controller = controller;
-      javaProgramClass.controllerStarted();
+      try {
+        javaProgramClass.controllerStarted();
+      } catch (Exception ex) {
+        System.err.println("Could not run controlerStarted method for script "+this.getName());
+        printGeneratedProgram(System.err);
+        ex.printStackTrace(System.err);
+      }
     }
   }
 
@@ -356,7 +374,13 @@ public class JavaScriptingPR
     this.controller = controller;
     if (javaProgramClass != null) {
       javaProgramClass.controller = controller;
-      javaProgramClass.controllerFinished();
+      try {
+        javaProgramClass.controllerFinished();
+      } catch (Exception ex) {
+        System.err.println("Could not run controlerFinished method for script "+this.getName());
+        printGeneratedProgram(System.err);
+        ex.printStackTrace(System.err);
+      }
       javaProgramClass.controller = null;
       javaProgramClass.corpus = null;
       javaProgramClass.parms = null;
@@ -368,7 +392,13 @@ public class JavaScriptingPR
     this.controller = controller;
     if (javaProgramClass != null) {
       javaProgramClass.controller = controller;
-      javaProgramClass.controllerAborted(throwable);
+      try {
+        javaProgramClass.controllerAborted(throwable);
+      } catch (Exception ex) {
+        System.err.println("Could not run controlerAborted method for script "+this.getName());
+        printGeneratedProgram(System.err);
+        ex.printStackTrace(System.err);
+      }
       javaProgramClass.controller = null;
       javaProgramClass.corpus = null;
       javaProgramClass.parms = null;
