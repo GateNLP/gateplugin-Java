@@ -319,6 +319,9 @@ public class JavaScriptingPR
   public void execute() {
     if (javaProgramClass != null) {
       try {
+        javaProgramClass.resource1 = getResource1();
+        javaProgramClass.resource2 = getResource2();
+        javaProgramClass.resource3 = getResource3();
         javaProgramClass.doc = document;
         javaProgramClass.controller = controller;
         javaProgramClass.corpus = corpus;
@@ -358,6 +361,9 @@ public class JavaScriptingPR
   public void controllerExecutionStarted(Controller controller) {
     this.controller = controller;
     if (javaProgramClass != null) {
+      javaProgramClass.resource1 = getResource1();
+      javaProgramClass.resource2 = getResource2();
+      javaProgramClass.resource3 = getResource3();
       javaProgramClass.controller = controller;
       try {
         javaProgramClass.controllerStarted();
