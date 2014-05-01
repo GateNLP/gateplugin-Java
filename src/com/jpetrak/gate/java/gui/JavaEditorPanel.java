@@ -96,11 +96,6 @@ public class JavaEditorPanel extends javax.swing.JPanel {
     jTextField1.setForeground(Color.black);
   }
   
-  public void setCode(String code) {
-    textArea.setText(code);
-  }
-  
-  
   /** This method is called from within the constructor to
    * initialize the form.
    * WARNING: Do NOT modify this code. The content of this method is

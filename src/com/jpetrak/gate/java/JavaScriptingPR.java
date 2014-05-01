@@ -289,6 +289,9 @@ public class JavaScriptingPR
       javaProgramClass.cleanupPr();
       javaProgramClass.resetInitAll();
     }
+    if(registeredEditorVR != null) {
+      registeredEditorVR.setFile(getJavaProgramFile());
+    }
     init();
   }
 
