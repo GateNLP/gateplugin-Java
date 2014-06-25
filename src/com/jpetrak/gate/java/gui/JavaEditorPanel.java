@@ -16,13 +16,19 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 
+// TODO: add search/replace functionality
+// probably as another button in the top line "Find/Replace" (or icon?) which 
+// could bring up a dialog similar to what jedit has
+// Should then also assign Ctrl-F/Ctrl-R etc to do find/replace just from
+// the keyboard, no dialog.
+// See javadoc here: http://javadoc.fifesoft.com/rsyntaxtextarea/org/fife/ui/rtextarea/SearchEngine.html#find%28javax.swing.JTextArea,%20org.fife.ui.rtextarea.SearchContext%29
 
 // SEE: http://javadoc.fifesoft.com/rsyntaxtextarea/
 // http://javadoc.fifesoft.com/rsyntaxtextarea/org/fife/ui/rsyntaxtextarea/TextEditorPane.html
 // http://javadoc.fifesoft.com/rsyntaxtextarea/org/fife/ui/rsyntaxtextarea/FileLocation.html
 /**
  *
- * @author johann
+ * @author Johann Petrak
  */
 public class JavaEditorPanel extends javax.swing.JPanel {
 
