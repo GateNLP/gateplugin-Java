@@ -422,21 +422,12 @@ public class JavaScriptingPR
   protected ConcurrentMap<String, Object> globalsForPr =
           new ConcurrentHashMap<String, Object>();
   
-  protected Object lockForPr;
-
-  protected void updateShared() {
-    javaProgramClass.lockForPr = lockForPr;
-    javaProgramClass.globalsForPr = globalsForPr;
-  }
-  
-  
   @Override
   public Resource duplicate(Factory.DuplicationContext dc) throws ResourceInstantiationException {
     JavaScriptingPR res = (JavaScriptingPR) Factory.defaultDuplicate(this, dc);
     // Now give the new instance access to the ScriptGlobal data structure
-    res.globalsForPr = this.javaProgramClass.globalsForPr;
-    res.lockForPr = this.lockForPr;
-    res.updateShared();
+    res.javaProgramClass.globalsForPr = this.javaProgramClass.globalsForPr;
+    res.javaProgramClass.lockForPr = this.javaProgramClass.lockForPr;
     return res;
   }
 }
