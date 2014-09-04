@@ -10,9 +10,11 @@ import gate.FeatureMap;
 import gate.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.apache.log4j.Logger;
 
 
 public class JavaScripting  {
+  public static Logger logger = Logger.getLogger(JavaScripting.class);
   public static ConcurrentMap<String,Object> globalsForAll = new ConcurrentHashMap<String,Object>();
   public ConcurrentMap<String,Object> globalsForPr = null;  // will be set by JavaSriptingPR
   public Document doc = null;
