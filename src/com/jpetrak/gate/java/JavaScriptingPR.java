@@ -176,6 +176,15 @@ public class JavaScriptingPR
   }
   protected Flag initializedForPr;
   
+  @Sharable
+  public void setCleanedUpForPr(Flag value) {
+    cleanedUpForPr = value;
+  }
+  public Flag getCleanedUpForPr() {
+    return cleanedUpForPr;
+  }
+  protected Flag cleanedUpForPr;
+  
   // This will try and compile the script. 
   // This is done 
   // = at init() time
@@ -291,6 +300,7 @@ public class JavaScriptingPR
       lockForPr = new Object();
       globalsForPr = new ConcurrentHashMap<String, Object>();
       initializedForPr = new Flag(false);
+      cleanedUpForPr = new Flag(false);
     }
     // This gets called for both the original PR and any copy created by
     // defaultDuplication. Each copy of the PR should get its own 
@@ -335,7 +345,11 @@ public class JavaScriptingPR
     super.cleanup();
     // make sure the generated class does not hold any references
     if (javaProgramClass != null) {
-      javaProgramClass.cleanupPr();
+      if(!cleanedUpForPr.get()) {
+        javaProgramClass.cleanupPr();              
+        cleanedUpForPr.set(true);
+      }
+      javaProgramClass.cleanup();
       javaProgramClass.doc = null;
       javaProgramClass.controller = null;
       javaProgramClass.corpus = null;

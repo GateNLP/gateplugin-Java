@@ -79,7 +79,7 @@ public class JavaScripting  {
   
   public void cleanupPr() { }
   
-  
+  public void cleanup() { }
   
   
   

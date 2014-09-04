@@ -25,5 +25,15 @@ public void initPr() {
 }
 
 public void init() {
-  System.out.println("Doign the script initialization in "+this.getClass()+" duplicationId is "+duplicationId);
+  System.out.println("Doing the script initialization in "+this.getClass()+" duplicationId is "+duplicationId);
 }
+
+public void cleanup() {
+  System.out.println("Doing the script cleanup in "+this.getClass()+" duplicationId is "+duplicationId);
+}
+
+public void cleanupPr() {
+  System.out.println("Doing the PR cleanup in "+this.getClass()+" duplicationId is "+duplicationId);
+}
+
+
