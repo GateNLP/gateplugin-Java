@@ -28,6 +28,7 @@ public class JavaScripting  {
   public Resource resource1 = null;
   public Resource resource2 = null;
   public Resource resource3 = null;
+  public int duplicationId = 0;
   public void execute() { 
   }
   public void controllerStarted()  { }

@@ -157,6 +157,8 @@ public class JavaScriptingPR
   Pattern importPattern = Pattern.compile(
           "\\s*import\\s+([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*(?:[\\p{L}_$][\\p{L}\\p{N}_$]*|\\*)\\s*;\\s*(?://.*)?");
 
+  protected Object lockForPr;  
+  
   // This will try and compile the script. 
   // This is done 
   // = at init() time
@@ -220,7 +222,7 @@ public class JavaScriptingPR
       javaProgramClass = (JavaScripting) Gate.getClassLoader().
               loadClass("javascripting." + className).newInstance();
       javaProgramClass.globalsForPr = globalsForPr;
-      javaProgramClass.lockForPr = new Object();
+      javaProgramClass.lockForPr = lockForPr;
       if(registeredEditorVR != null) {
         registeredEditorVR.setCompilationOk();
       }
@@ -265,6 +267,7 @@ public class JavaScriptingPR
 
   @Override
   public Resource init() throws ResourceInstantiationException {
+    lockForPr = new Object();
     if (getJavaProgramUrl() == null) {
       throw new ResourceInstantiationException("The javaProgramUrl must not be empty");
     }
@@ -428,6 +431,11 @@ public class JavaScriptingPR
     // Now give the new instance access to the ScriptGlobal data structure
     res.javaProgramClass.globalsForPr = this.javaProgramClass.globalsForPr;
     res.javaProgramClass.lockForPr = this.javaProgramClass.lockForPr;
+    if(res.javaProgramClass != null) {
+      res.javaProgramClass.duplicationId = this.javaProgramClass.duplicationId + 1;
+    }
+
     return res;
   }
+    
 }
