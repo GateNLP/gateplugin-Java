@@ -9,7 +9,7 @@ public void execute() {
   System.out.println("The corpus is "+corpus);
   System.out.println("The globalsForAll is: "+globalsForAll);
   System.out.println("The globalsForScript is: "+globalsForPr);
-  System.out.println("DOES IT WORK?");
+  System.out.println("Duplication ID is: "+duplicationId);
 }
 
 @Override
@@ -25,5 +25,5 @@ public void initPr() {
 }
 
 public void init() {
-  System.out.println("Doign the script initialization in "+this.getClass());
+  System.out.println("Doign the script initialization in "+this.getClass()+" duplicationId is "+duplicationId);
 }
