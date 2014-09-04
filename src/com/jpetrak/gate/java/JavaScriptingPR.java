@@ -18,6 +18,7 @@ import gate.creole.metadata.CreoleResource;
 import gate.creole.metadata.CreoleParameter;
 import gate.creole.metadata.Optional;
 import gate.creole.metadata.RunTime;
+import gate.creole.metadata.Sharable;
 import gate.util.GateClassLoader;
 import gate.util.GateRuntimeException;
 import java.io.File;
@@ -157,7 +158,23 @@ public class JavaScriptingPR
   Pattern importPattern = Pattern.compile(
           "\\s*import\\s+([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*(?:[\\p{L}_$][\\p{L}\\p{N}_$]*|\\*)\\s*;\\s*(?://.*)?");
 
+  @Sharable
+  public void setLockForPr(Object what) {
+    lockForPr = what;
+  }
+  public Object getLockForPr() {
+    return lockForPr;
+  }
   protected Object lockForPr;  
+  
+  @Sharable
+  public void setInitializedForPr(Flag value) {
+    initializedForPr = value;
+  }
+  public Flag getInitializedForPr() {
+    return initializedForPr;
+  }
+  protected Flag initializedForPr;
   
   // This will try and compile the script. 
   // This is done 
@@ -223,6 +240,7 @@ public class JavaScriptingPR
               loadClass("javascripting." + className).newInstance();
       javaProgramClass.globalsForPr = globalsForPr;
       javaProgramClass.lockForPr = lockForPr;
+      javaProgramClass.initializedForPr = initializedForPr;
       if(registeredEditorVR != null) {
         registeredEditorVR.setCompilationOk();
       }
@@ -267,7 +285,19 @@ public class JavaScriptingPR
 
   @Override
   public Resource init() throws ResourceInstantiationException {
-    lockForPr = new Object();
+    // This is a sharable field so it will only be null if this init() call
+    // is not for a duplicated instance.
+    if(lockForPr == null) {
+      lockForPr = new Object();
+      globalsForPr = new ConcurrentHashMap<String, Object>();
+      initializedForPr = new Flag(false);
+    }
+    // This gets called for both the original PR and any copy created by
+    // defaultDuplication. Each copy of the PR should get its own 
+    // copy of the compiled script, so the first thing we always do is
+    // try to compile (and thus store) the script.
+    // All the relevant JavaScripting fields will get set in tryCompileScript,
+    // if the compile was successful. 
     if (getJavaProgramUrl() == null) {
       throw new ResourceInstantiationException("The javaProgramUrl must not be empty");
     }
@@ -288,9 +318,11 @@ public class JavaScriptingPR
     //System.out.println("JavaScriptingPR reinitializing ...");
     // We re-set the global initialization indicator so that re-init can be
     // used to test the global init method
+    initializedForPr.set(false); // this will only work for non-duplicated things
     if(javaProgramClass != null) {
       javaProgramClass.cleanupPr();
       javaProgramClass.resetInitAll();
+      javaProgramClass.initializedForPr = initializedForPr;
     }
     if(registeredEditorVR != null) {
       registeredEditorVR.setFile(getJavaProgramFile());
@@ -371,6 +403,7 @@ public class JavaScriptingPR
       javaProgramClass.resource2 = getResource2();
       javaProgramClass.resource3 = getResource3();
       javaProgramClass.controller = controller;
+      javaProgramClass.parms = getScriptParams();
       try {
         javaProgramClass.controllerStarted();
       } catch (Exception ex) {
@@ -416,25 +449,21 @@ public class JavaScriptingPR
       javaProgramClass.parms = null;
     }
   }
-  // This is how we share global data between the different copies created
-  // by custom duplication: each JavaScriptingPR instance will initially 
-  // get its initial globalForScript map instance. But when duplicate is 
-  // executed, that map instance will be overridden by whatever the first PR
-  // instance was. At the point where a new compiled script object is created,
-  // the compiled script object's map field will get set to that map.
-  protected ConcurrentMap<String, Object> globalsForPr =
-          new ConcurrentHashMap<String, Object>();
+  @Sharable
+  public void setGlobalsForPr(ConcurrentMap<String,Object> it) {
+    globalsForPr = it;
+  }
+  public ConcurrentMap<String,Object>  getGlobalsForPr() {
+    return globalsForPr;
+  }
+  protected ConcurrentMap<String, Object> globalsForPr;
   
   @Override
   public Resource duplicate(Factory.DuplicationContext dc) throws ResourceInstantiationException {
     JavaScriptingPR res = (JavaScriptingPR) Factory.defaultDuplicate(this, dc);
-    // Now give the new instance access to the ScriptGlobal data structure
-    res.javaProgramClass.globalsForPr = this.javaProgramClass.globalsForPr;
-    res.javaProgramClass.lockForPr = this.javaProgramClass.lockForPr;
     if(res.javaProgramClass != null) {
       res.javaProgramClass.duplicationId = this.javaProgramClass.duplicationId + 1;
     }
-
     return res;
   }
     

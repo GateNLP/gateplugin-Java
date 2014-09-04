@@ -14,9 +14,28 @@ import org.apache.log4j.Logger;
 
 
 public class JavaScripting  {
-  public static Logger logger = Logger.getLogger(JavaScripting.class);
+  // we create one logger per effective JavaScripting class (which will be
+  // a subclass of this class)
+  public Logger logger = Logger.getLogger(this.getClass());
+  
+  // This is a global datastructure for all instances of JavaScripting, i.e.
+  // all the different scripting PRs and also the duplicates of one scripting PR.
   public static ConcurrentMap<String,Object> globalsForAll = new ConcurrentHashMap<String,Object>();
-  public ConcurrentMap<String,Object> globalsForPr = null;  // will be set by JavaSriptingPR
+  
+  // This datastructure is always set by the PR which compiles/creates the 
+  // scripting instance. For instances which have been created for duplicates
+  // of the same script, the initial datastructure will be shared. That way
+  // all duplicated copies will access the same data here.
+  public ConcurrentMap<String,Object> globalsForPr;  // will be set by JavaSriptingPR
+
+  // This will get set to a value which is shared between the duplication copies
+  // of the generating PR.
+  public Flag initializedForPr;
+  
+  
+  // These are set each time execute() is called and thus get whatever the
+  // scriptingPR or its duplicate gets. In other words, e.g. the controller
+  // will be a different controller for each duplicate.
   public Document doc = null;
   public Controller controller = null;
   public Corpus corpus = null;
@@ -28,14 +47,36 @@ public class JavaScripting  {
   public Resource resource1 = null;
   public Resource resource2 = null;
   public Resource resource3 = null;
+  
+  // The duplicationId will be different for each duplicate copy of the
+  // original.
   public int duplicationId = 0;
+  
   public void execute() { 
   }
   public void controllerStarted()  { }
   public void controllerFinished()  { }
   public void controllerAborted( Throwable throwable)  { }
+  
+  
+  /** 
+   * This gets called once for each script and each copy.
+   * It will get called before the first document is processed and 
+   * only if a document is processed.
+   * 
+   */
+  public void init() { }
+  
+  /** 
+   * This gets called once for all duplicated copies of a script.
+   * It will get called before the first document is processed and 
+   * only if a document is processed.
+   */
   public void initPr() { }
+  
   public void initAll() { }
+  
+  
   public void cleanupPr() { }
   
   
@@ -45,23 +86,32 @@ public class JavaScripting  {
   void callExecute() {
     callInitAll();
     callInitPr();
+    callInit();
     execute();
   }
-  // This is an object that allows to serialize code so that only one instance
-  // of several custom-duplicated ones will be run.
-  // This will get set, by the PR which creates the first instance of this class
-  // for a script. When that PR gets c
+
+  
   public Object lockForPr = null;
-  public boolean initializedForPr = false;
   private void callInitPr() { 
-    if(initializedForPr) return;
+    if(initializedForPr.get()) return;
     synchronized(lockForPr) {
-      if(!initializedForPr) {
+      if(!initializedForPr.get()) {
         initPr();
-        initializedForPr = true;
+        initializedForPr.set(true);
       }
     }
   }
+  
+  private boolean initialized = false;
+  private void callInit() { 
+    if(initialized) return;
+    if(!initialized) {
+      init();
+      initialized = true;
+    }
+  }
+  
+  
   // This is an object that loows to serialize code so that only one instance
   // of all JavaScripting instances in the VM will run. 
   public static Object lockForAll = new Object();

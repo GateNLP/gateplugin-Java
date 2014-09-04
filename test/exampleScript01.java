@@ -21,5 +21,9 @@ public void initAll() {
 }
 
 public void initPr() {
-  System.out.println("Doing the PR initialization");
+  System.out.println("Doing the PR initialization in "+this.getClass());
+}
+
+public void init() {
+  System.out.println("Doign the script initialization in "+this.getClass());
 }
