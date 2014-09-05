@@ -24,12 +24,15 @@ import gate.util.GateRuntimeException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -136,6 +139,44 @@ public class JavaScriptingPR
     }
     return scriptParams;
   }
+  
+  
+  protected URL libDirUrl = null;
+  @Optional
+  @RunTime
+  @CreoleParameter()
+  public void setLibDirUrl(URL url) {
+    // if the url has been set to something we do not already have,
+    // go through all files with the extension "jar" in the directory
+    // and add that jar to the Gate class path.
+    logger.info("Setting libDirUrl to "+url+" was "+libDirUrl);
+    /*
+    if(libDirUrl != null && !url.equals(libDirUrl)) {  
+      File dirFile = gate.util.Files.fileFromURL(url);
+      File[] directoryListing = dirFile.listFiles();
+      if (directoryListing != null) {
+        for (File child : directoryListing) {          
+          if(child.getName().toLowerCase().endsWith(".jar")) {
+            try {
+              Gate.getClassLoader().addURL(child.toURI().toURL());
+              logger.info("Added to Gate classpath: "+child.toURI().toURL());
+            } catch (MalformedURLException ex) {
+              logger.error("Could not add file "+child+" to classpath",ex);
+            }
+          }
+        }
+      } else {
+      }
+    }
+    */
+    libDirUrl = url;
+  }
+  public URL getLibDirUrl() {
+    return libDirUrl;
+  }
+          
+  public org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(this.getClass());
+  
   protected FeatureMap scriptParams;
   GateClassLoader classloader = null;
   Controller controller = null;
@@ -201,6 +242,25 @@ public class JavaScriptingPR
     classloader =
             gate.Gate.getClassLoader().getDisposableClassLoader(
             javaProgramUrl.toExternalForm() + System.currentTimeMillis());
+    if(libDirUrl != null) {  
+      File dirFile = gate.util.Files.fileFromURL(libDirUrl);
+      File[] directoryListing = dirFile.listFiles();
+      if (directoryListing != null) {
+        for (File child : directoryListing) {          
+          if(child.getName().toLowerCase().endsWith(".jar")) {
+            try {
+              Gate.getClassLoader().addURL(child.toURI().toURL());
+              logger.info("Added to Gate classpath: "+child.toURI().toURL());
+            } catch (MalformedURLException ex) {
+              logger.error("Could not add file "+child+" to classpath",ex);
+            }
+          }
+        }
+      } else {
+        logger.error("Not a directory: "+libDirUrl);
+      }
+    }
+    
     try {
       className = "JavaScriptingClass" + getNextId();
       // need to try and reload and compile (if necessary) the script
@@ -236,8 +296,7 @@ public class JavaScriptingPR
       javaProgramSource = sb.toString();
       //System.out.println("Program Source: " + javaProgramSource);
     } catch (IOException ex) {
-      System.err.println("Problem reading program from " + javaProgramUrl);
-      ex.printStackTrace(System.err);
+      logger.error("Problem reading program from " + javaProgramUrl,ex);
       return;
     }
     //System.out.println("(Re-)Compiling program "+getJavaProgramUrl()+" ... ");
@@ -258,8 +317,7 @@ public class JavaScriptingPR
       javaProgramClass.resource3 = resource3;
       isCompileError = false;
     } catch (Exception ex) {
-      System.err.println("Problem compiling JavaScripting Class");
-      ex.printStackTrace(System.err);
+      logger.error("Problem compiling JavaScripting Class",ex);
       if(classloader != null) {
         Gate.getClassLoader().forgetClassLoader(classloader);
         classloader = null;
@@ -421,7 +479,7 @@ public class JavaScriptingPR
       try {
         javaProgramClass.controllerStarted();
       } catch (Exception ex) {
-        System.err.println("Could not run controlerStarted method for script "+this.getName());
+        System.err.println("Could not run controllerStarted method for script "+this.getName());
         printGeneratedProgram(System.err);
         ex.printStackTrace(System.err);
       }
