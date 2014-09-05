@@ -3,7 +3,7 @@ package com.jpetrak.gate.java;
 /**
  * Flag is like a mutable Boolean. It can be used as a sharable object
  * to signal a state between all duplication copies of a script.
- * @author johann
+ * @author Johann Petrak
  */
 public class Flag {
   protected boolean value = false;

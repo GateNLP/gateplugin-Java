@@ -93,12 +93,21 @@ public class JavaScripting  {
   
   public Object lockForPr = null;
   private void callInitPr() { 
+    // TODO: it should maybe be the calling PR's job to make sure this is 
+    // only called once?
     if(initializedForPr.get()) return;
     synchronized(lockForPr) {
       if(!initializedForPr.get()) {
         initPr();
         initializedForPr.set(true);
       }
+    }
+  }
+  
+  public void callCleanupPr() {
+    // NOTE: the calling PR makes sure this is only called once!
+    synchronized(lockForPr) {
+      cleanupPr();
     }
   }
   
