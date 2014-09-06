@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -226,6 +227,24 @@ public class JavaScriptingPR
   }
   protected Flag cleanedUpForPr;
   
+  
+  // the nrDuplicates counter will get shared between copies when this
+  // PR is being duplicated. We will do a synchronized increment of the 
+  // counter in our own duplication method.
+  // NOTE: the first, initial PR will have NrDuplicates set to 0, the
+  // actual duplicates will get numbers 1, 2, 3 ...
+  // (so the first instance does NOT count as a duplicate)
+  
+  @Sharable
+  public void setNrDuplicates(AtomicInteger value) {
+    nrDuplicates = value;
+  }
+  public AtomicInteger getNrDuplicates() {
+    return nrDuplicates;
+  }
+  protected AtomicInteger nrDuplicates;
+  
+  
   // This will try and compile the script. 
   // This is done 
   // = at init() time
@@ -359,6 +378,7 @@ public class JavaScriptingPR
       globalsForPr = new ConcurrentHashMap<String, Object>();
       initializedForPr = new Flag(false);
       cleanedUpForPr = new Flag(false);
+      nrDuplicates = new AtomicInteger(0);
     }
     // This gets called for both the original PR and any copy created by
     // defaultDuplication. Each copy of the PR should get its own 
@@ -533,8 +553,9 @@ public class JavaScriptingPR
   @Override
   public Resource duplicate(Factory.DuplicationContext dc) throws ResourceInstantiationException {
     JavaScriptingPR res = (JavaScriptingPR) Factory.defaultDuplicate(this, dc);
+    int nr = nrDuplicates.addAndGet(1);
     if(res.javaProgramClass != null) {
-      res.javaProgramClass.duplicationId = this.javaProgramClass.duplicationId + 1;
+      res.javaProgramClass.duplicationId = nr;
     }
     return res;
   }
