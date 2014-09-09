@@ -260,7 +260,8 @@ public class JavaScriptingPR
     }
     classloader =
             gate.Gate.getClassLoader().getDisposableClassLoader(
-            javaProgramUrl.toExternalForm() + System.currentTimeMillis());
+            javaProgramUrl.toExternalForm() + System.currentTimeMillis(),
+            true);
     if(libDirUrl != null) {  
       File dirFile = gate.util.Files.fileFromURL(libDirUrl);
       File[] directoryListing = dirFile.listFiles();
