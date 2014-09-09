@@ -324,7 +324,7 @@ public class JavaScriptingPR
     toCompile.put("javascripting." + className, javaProgramSource);
     try {
       gate.util.Javac.loadClasses(toCompile, classloader);
-      javaProgramClass = (JavaScripting) Gate.getClassLoader().
+      javaProgramClass = (JavaScripting) classloader.
               loadClass("javascripting." + className).newInstance();
       javaProgramClass.globalsForPr = globalsForPr;
       javaProgramClass.lockForPr = lockForPr;
