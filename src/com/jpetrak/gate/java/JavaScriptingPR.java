@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -147,29 +145,6 @@ public class JavaScriptingPR
   @RunTime
   @CreoleParameter()
   public void setLibDirUrl(URL url) {
-    // if the url has been set to something we do not already have,
-    // go through all files with the extension "jar" in the directory
-    // and add that jar to the Gate class path.
-    logger.info("Setting libDirUrl to "+url+" was "+libDirUrl);
-    /*
-    if(libDirUrl != null && !url.equals(libDirUrl)) {  
-      File dirFile = gate.util.Files.fileFromURL(url);
-      File[] directoryListing = dirFile.listFiles();
-      if (directoryListing != null) {
-        for (File child : directoryListing) {          
-          if(child.getName().toLowerCase().endsWith(".jar")) {
-            try {
-              Gate.getClassLoader().addURL(child.toURI().toURL());
-              logger.info("Added to Gate classpath: "+child.toURI().toURL());
-            } catch (MalformedURLException ex) {
-              logger.error("Could not add file "+child+" to classpath",ex);
-            }
-          }
-        }
-      } else {
-      }
-    }
-    */
     libDirUrl = url;
   }
   public URL getLibDirUrl() {
@@ -448,6 +423,9 @@ public class JavaScriptingPR
 
   @Override
   public void execute() {
+    if(isInterrupted()) {
+      throw new GateRuntimeException("Processing has been interrupted!");
+    }
     if (javaProgramClass != null) {
       try {
         javaProgramClass.resource1 = getResource1();
