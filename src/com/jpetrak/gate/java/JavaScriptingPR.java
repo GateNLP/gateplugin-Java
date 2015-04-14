@@ -19,6 +19,7 @@ import gate.creole.metadata.CreoleParameter;
 import gate.creole.metadata.Optional;
 import gate.creole.metadata.RunTime;
 import gate.creole.metadata.Sharable;
+import gate.util.Benchmark;
 import gate.util.GateClassLoader;
 import gate.util.GateRuntimeException;
 import java.io.File;
@@ -423,6 +424,7 @@ public class JavaScriptingPR
 
   @Override
   public void execute() {
+    long startTime = Benchmark.startPoint();
     if(isInterrupted()) {
       throw new GateRuntimeException("Processing has been interrupted!");
     }
@@ -450,6 +452,8 @@ public class JavaScriptingPR
       } catch (Exception ex) {
         printGeneratedProgram(System.err);
         throw new GateRuntimeException("Could not run program for script "+this.getName(), ex);
+      } finally {
+                benchmarkCheckpoint(startTime, "__execute");        
       }
     } else {
       throw new GateRuntimeException("Cannot run script, compilation failed: "+getJavaProgramUrl());
@@ -480,6 +484,7 @@ public class JavaScriptingPR
       } catch (Exception ex) {
         System.err.println("Could not run controllerStarted method for script "+this.getName());
         printGeneratedProgram(System.err);
+        // TODO: should we throw an exception instead?
         ex.printStackTrace(System.err);
       }
     }
@@ -539,4 +544,26 @@ public class JavaScriptingPR
     return res;
   }
     
+  // **** BENCHMARK-RELATED
+  protected void benchmarkCheckpoint(long startTime, String name) {
+    if (Benchmark.isBenchmarkingEnabled()) {
+      Benchmark.checkPointWithDuration(
+              Benchmark.startPoint() - startTime,
+              Benchmark.createBenchmarkId(name, this.getBenchmarkId()),
+              this, null);
+    }
+  }
+
+  public String getBenchmarkId() {
+    return benchmarkId;
+  }
+
+  public void setBenchmarkId(String string) {
+    benchmarkId = string;
+  }
+  private String benchmarkId = this.getName();
+
+  
+  
+  
 }

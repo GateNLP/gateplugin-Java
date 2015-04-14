@@ -18,6 +18,7 @@ public class JavaScripting  {
   // a subclass of this class)
   public Logger logger = Logger.getLogger(this.getClass());
   
+  // TODO: get rid of this, it is not very useful!
   // This is a global datastructure for all instances of JavaScripting, i.e.
   // all the different scripting PRs and also the duplicates of one scripting PR.
   public static ConcurrentMap<String,Object> globalsForAll = new ConcurrentHashMap<String,Object>();
@@ -74,6 +75,9 @@ public class JavaScripting  {
    */
   public void initPr() { }
   
+  // TODO: REMOVE, this is too brittle for real-world use, since it does not know
+  // about the controller/pipeline from which it gets invoked. This will get redundant
+  // once we have a beeter execution framework ...
   public void initAll() { }
   
   
