@@ -35,15 +35,19 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 
 // NOTE: recompiling a script will re-set the flag for running initPr()
 // only re-initializing the PR will re-set the flag for running initAll()
 
+// NOTE: we should support using the PR with non-File URLs for the Java script. In that 
+// case, the editor would have to be read-only.
+
 
 @CreoleResource(
         name = "Java Scripting PR",
-        helpURL = "",
+        helpURL = "https://github.com/johann-petrak/gateplugin-Java/wiki/JavaScriptingPR",
         comment = "Use a Java program as a processing resource")
 public class JavaScriptingPR
         extends AbstractLanguageAnalyser
@@ -144,7 +148,7 @@ public class JavaScriptingPR
   protected URL libDirUrl = null;
   @Optional
   @RunTime
-  @CreoleParameter()
+  @CreoleParameter(comment = "An optional directory with additional JAR files to use for compilation and running. If specified, must be a file: URL")
   public void setLibDirUrl(URL url) {
     libDirUrl = url;
   }
@@ -266,6 +270,7 @@ public class JavaScriptingPR
       javaProgramLines = new ArrayList<String>();
       List<String> scriptLines = new ArrayList<String>();
       LineIterator it = FileUtils.lineIterator(javaProgramFile, "UTF-8");
+      // IOUtils.lineIterator(javaProgramUrl.openStream(),"UTF-8");
       try {
         while (it.hasNext()) {
           String line = it.nextLine();
