@@ -454,6 +454,7 @@ public class JavaScriptingPR
         javaProgramClass.outputASName = null;
         javaProgramClass.inputAS = null;
         javaProgramClass.outputAS = null;
+        javaProgramClass.prName = this.getName();
       } catch (Exception ex) {
         printGeneratedProgram(System.err);
         throw new GateRuntimeException("Could not run program for script "+this.getName(), ex);
@@ -484,6 +485,7 @@ public class JavaScriptingPR
       javaProgramClass.resource3 = getResource3();
       javaProgramClass.controller = controller;
       javaProgramClass.parms = getScriptParams();
+      javaProgramClass.prName = this.getName();
       try {
         javaProgramClass.controllerStarted();
       } catch (Exception ex) {

@@ -48,6 +48,7 @@ public class JavaScripting  {
   public Resource resource1 = null;
   public Resource resource2 = null;
   public Resource resource3 = null;
+  public String prName = null;
   
   // The duplicationId will be different for each duplicate copy of the
   // original.
