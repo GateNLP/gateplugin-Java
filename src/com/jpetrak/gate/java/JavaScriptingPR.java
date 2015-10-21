@@ -430,9 +430,6 @@ public class JavaScriptingPR
   @Override
   public void execute() {
     long startTime = Benchmark.startPoint();
-    if(isInterrupted()) {
-      throw new GateRuntimeException("Processing has been interrupted!");
-    }
     if (javaProgramClass != null) {
       try {
         javaProgramClass.resource1 = getResource1();
