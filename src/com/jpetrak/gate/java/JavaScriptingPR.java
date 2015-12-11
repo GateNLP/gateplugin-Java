@@ -432,10 +432,10 @@ public class JavaScriptingPR
   @Override
   public void execute() {
     long startTime = Benchmark.startPoint();
-    interrupted = false;
-    //if(isInterrupted()) {
-    //  throw new GateRuntimeException("Processing has been interrupted!");
-    //}
+    // TODO: properly handle manual interruption here, or in cooperation
+    // with the actual script!!
+    // Check out how to use variable "interrupted" and method "isInterrupted()"
+    // properly!
     if (javaProgramClass != null) {
       try {
         javaProgramClass.resource1 = getResource1();
