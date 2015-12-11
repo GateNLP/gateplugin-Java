@@ -9,6 +9,8 @@ import gate.Document;
 import gate.Factory;
 import gate.FeatureMap;
 import gate.Gate;
+import gate.LanguageResource;
+import gate.ProcessingResource;
 
 import gate.creole.AbstractLanguageAnalyser;
 import gate.creole.ControllerAwarePR;
@@ -430,9 +432,10 @@ public class JavaScriptingPR
   @Override
   public void execute() {
     long startTime = Benchmark.startPoint();
-    if(isInterrupted()) {
-      throw new GateRuntimeException("Processing has been interrupted!");
-    }
+    interrupted = false;
+    //if(isInterrupted()) {
+    //  throw new GateRuntimeException("Processing has been interrupted!");
+    //}
     if (javaProgramClass != null) {
       try {
         javaProgramClass.resource1 = getResource1();
@@ -570,7 +573,7 @@ public class JavaScriptingPR
   }
   private String benchmarkId = this.getName();
 
-  
+  public static interface LrOrPr extends LanguageResource, ProcessingResource { }
   
   
 }

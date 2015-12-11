@@ -1,3 +1,11 @@
 make it possible to run code before cleanup: this can help when we process a corpus
   with gcp and we want to process corpus statistics or similar
   !!! deal with multithreading and custom diplication for this!!!
+
+
+Extend editor:
+  = allow search/replace etc: http://bobbylight.github.io/RSyntaxTextArea/
+    to build everything that is needed, needs to have the various component dirs installed in parallel!
+  = allow to start without a java file then pick one etc? 
+  = better handling of line numebers for error messages. 
+  = better handling if isInterrupted etc.
