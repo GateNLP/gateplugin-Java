@@ -11,7 +11,7 @@
   </parent>
   <!-- The Maven coordinates of this plugin -->
   <groupId>uk.ac.gate.plugins</groupId>
-  <artifactId>modularpipelines</artifactId>
+  <artifactId>java</artifactId>
   <version>0.4-SNAPSHOT</version>
   <!-- Information about this plugin. This will be used when the plugin is 
 		shown in the GATE plugin manager -->
