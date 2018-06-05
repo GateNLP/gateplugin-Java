@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <gate.util.persistence.GateApplication>
   <urlList class="gate.util.persistence.CollectionPersistence">
     <localList>
-      <gate.util.persistence.PersistenceManager-URLHolder>
-        <urlString>$relpath$../</urlString>
-      </gate.util.persistence.PersistenceManager-URLHolder>
+      <gate.creole.Plugin-Maven>
+        <group>uk.ac.gate.plugins</group>
+        <artifact>java</artifact>
+        <version>0.4</version>
+      </gate.creole.Plugin-Maven>
     </localList>
     <collectionType>java.util.ArrayList</collectionType>
   </urlList>
@@ -36,15 +39,15 @@
               </entry>
               <entry>
                 <string>sourceUrlEndOffset</string>
-                <null/>
+                <null />
               </entry>
               <entry>
                 <string>stringContent</string>
-                <string></string>
+                <string />
               </entry>
               <entry>
                 <string>mimeType</string>
-                <null/>
+                <null />
               </entry>
               <entry>
                 <string>encoding</string>
@@ -52,7 +55,7 @@
               </entry>
               <entry>
                 <string>sourceUrlStartOffset</string>
-                <null/>
+                <null />
               </entry>
             </localMap>
           </initParams>
@@ -65,7 +68,7 @@
         <localMap>
           <entry>
             <string>documentsList</string>
-            <null/>
+            <null />
           </entry>
         </localMap>
       </initParams>
@@ -74,46 +77,46 @@
       <localList>
         <gate.util.persistence.AnalyserRunningStrategyPersistence>
           <runMode>1</runMode>
-          <featureName></featureName>
-          <featureValue></featureValue>
+          <featureName />
+          <featureValue />
           <pr class="gate.util.persistence.LanguageAnalyserPersistence">
             <runtimeParams class="gate.util.persistence.MapPersistence">
               <mapType>gate.util.SimpleFeatureMapImpl</mapType>
               <localMap>
                 <entry>
                   <string>document</string>
-                  <null/>
+                  <null />
                 </entry>
                 <entry>
                   <string>resource2</string>
-                  <null/>
+                  <null />
                 </entry>
                 <entry>
                   <string>inputAS</string>
-                  <string></string>
+                  <string />
                 </entry>
                 <entry>
                   <string>resource3</string>
-                  <null/>
+                  <null />
                 </entry>
                 <entry>
                   <string>corpus</string>
-                  <null/>
+                  <null />
                 </entry>
                 <entry>
                   <string>scriptParams</string>
                   <gate.util.persistence.MapPersistence>
                     <mapType>gate.util.SimpleFeatureMapImpl</mapType>
-                    <localMap/>
+                    <localMap />
                   </gate.util.persistence.MapPersistence>
                 </entry>
                 <entry>
                   <string>outputAS</string>
-                  <string></string>
+                  <string />
                 </entry>
                 <entry>
                   <string>resource1</string>
-                  <null/>
+                  <null />
                 </entry>
               </localMap>
             </runtimeParams>
@@ -132,7 +135,7 @@
             </initParams>
             <features class="gate.util.persistence.MapPersistence">
               <mapType>gate.util.SimpleFeatureMapImpl</mapType>
-              <localMap/>
+              <localMap />
             </features>
           </pr>
         </gate.util.persistence.AnalyserRunningStrategyPersistence>
@@ -141,7 +144,7 @@
     </strategiesList>
     <prList class="gate.util.persistence.CollectionPersistence">
       <localList>
-        <gate.util.persistence.LanguageAnalyserPersistence reference="../../../strategiesList/localList/gate.util.persistence.AnalyserRunningStrategyPersistence/pr"/>
+        <gate.util.persistence.LanguageAnalyserPersistence reference="../../../strategiesList/localList/gate.util.persistence.AnalyserRunningStrategyPersistence/pr" />
       </localList>
       <collectionType>java.util.ArrayList</collectionType>
     </prList>
@@ -149,11 +152,12 @@
     <resourceName>testJavaScripting01</resourceName>
     <initParams class="gate.util.persistence.MapPersistence">
       <mapType>gate.util.SimpleFeatureMapImpl</mapType>
-      <localMap/>
+      <localMap />
     </initParams>
     <features class="gate.util.persistence.MapPersistence">
       <mapType>gate.util.SimpleFeatureMapImpl</mapType>
-      <localMap/>
+      <localMap />
     </features>
   </application>
 </gate.util.persistence.GateApplication>
+
