@@ -1,4 +1,4 @@
 <?xml version="1.0"?>  
 <CREOLE-DIRECTORY>
-  <REQUIRES GROUP="uk.ac.gate.plugins" ARTIFACT="annie" VERSION="8.5"/>
+  <REQUIRES GROUP="uk.ac.gate.plugins" ARTIFACT="annie" VERSION="8.6"/>
 </CREOLE-DIRECTORY>

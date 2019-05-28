@@ -5,7 +5,7 @@
       <gate.creole.Plugin-Maven>
         <group>uk.ac.gate.plugins</group>
         <artifact>java</artifact>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.5</version>
       </gate.creole.Plugin-Maven>
     </localList>
     <collectionType>java.util.ArrayList</collectionType>
@@ -160,4 +160,3 @@
     </features>
   </application>
 </gate.util.persistence.GateApplication>
-
