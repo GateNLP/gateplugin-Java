@@ -47,6 +47,13 @@
     <relativePath/>
   </parent>
   <packaging>jar</packaging>
+  <repositories>
+    <repository>
+      <id>gate.ac.uk</id>
+      <name>GATE Development Repository</name>
+      <url>https://repo.gate.ac.uk/content/groups/public/</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>com.fifesoft</groupId>
